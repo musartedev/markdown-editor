@@ -54,3 +54,30 @@ exports.delete = async (req, res) => {
     return sendResponse.error(res, err);
   }
 };
+
+exports.list = list = async (req, res) => {
+  const { sort = "created_at" } = req.query;
+  try {
+    const documents = await Document.find().sort({ [`${sort}`]: -1 });
+    return sendResponse.ok(res, 200, { documents });
+  } catch (err) {
+    console.log(err);
+    return sendResponse.error(res, err);
+  }
+};
+
+exports.get = async (req, res) => {
+  const { _id } = req.params;
+
+  if (!_id) return list(req, res);
+
+  if (!ObjectId.isValid(_id)) return sendResponse.error(res, "INVALID_FIELD");
+
+  try {
+    const document = await Document.find({ _id });
+    return sendResponse.ok(res, 200, { document });
+  } catch (err) {
+    console.log(err);
+    return sendResponse.error(res, err);
+  }
+};
