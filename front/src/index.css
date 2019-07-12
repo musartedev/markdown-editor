@@ -1,0 +1,21 @@
+::selection {
+  color: white;
+  background-color: #9c27b0;
+}
+
+.logo > img {
+  float: left;
+  width: 30px;
+  left: 5px;
+}
+
+.logo > h2 {
+  color: white;
+  position: relative;
+  left: 5px;
+  font-size: 20px;
+}
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected {
+  background-color: #9c27b0;
+}
