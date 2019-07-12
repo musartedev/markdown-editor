@@ -2,6 +2,8 @@ import React from "react";
 import { Row, Col, Input } from "antd";
 import showdown from "showdown";
 
+import "./Styles/MarkDownEditor.css";
+
 export default function MarkDownEditor(props) {
   const { rawText, handleOnChange } = props;
 
