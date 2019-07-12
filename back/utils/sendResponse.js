@@ -4,7 +4,8 @@ exports.ok = (res, httpCode, response) => res.status(httpCode).json(response);
 
 exports.error = (res, id) => {
   let error = ERRORS[id];
-  error = error ? error : ERRORS["INTERNAL_ERROR"];
+  id = error ? id : "INTERNAL_ERROR";
+  error = error ? error : ERRORS[id];
 
   return res.status(error.httpCode).json({
     error: {
