@@ -34,7 +34,23 @@ exports.edit = async (req, res) => {
     return sendResponse.ok(res, 200, docUpdated);
   } catch (err) {
     console.log(err);
+    return sendResponse.error(res, err);
+  }
+};
 
+exports.delete = async (req, res) => {
+  const { _id } = req.params;
+
+  if (!_id) return sendResponse.error(res, "MISSING_REQUIRED_FIELDS");
+
+  if (!ObjectId.isValid(_id)) return sendResponse.error(res, "INVALID_FIELD");
+
+  try {
+    await Document.deleteOne({ _id });
+
+    return sendResponse.ok(res, 200, { message: "Deleted successfully" });
+  } catch (err) {
+    console.log(err);
     return sendResponse.error(res, err);
   }
 };

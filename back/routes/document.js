@@ -6,6 +6,7 @@ module.exports = app => {
 
   documentRouter.post("/", documentController.add);
   documentRouter.put("/:_id", documentController.edit);
+  documentRouter.delete("/:_id", documentController.delete);
 
   app.use("/documents", documentRouter);
 };
