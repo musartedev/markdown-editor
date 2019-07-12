@@ -36,6 +36,9 @@ process.on("SIGINT", () =>
   })
 );
 
+// ROUTES
+documentRoutes(app);
+
 app.listen(PORT, function() {
   console.log(`Maggic Happens on port ${PORT}!`);
 });
