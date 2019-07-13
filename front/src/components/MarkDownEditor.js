@@ -20,6 +20,7 @@ export default function MarkDownEditor(props) {
         span={12}
       >
         <Input.TextArea
+          autoFocus
           className="textarea"
           value={rawText}
           onChange={({ target }) => handleOnChange(target.value)}

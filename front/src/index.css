@@ -3,6 +3,10 @@
   background-color: #9c27b0;
 }
 
+.center {
+  text-align: center;
+}
+
 .logo > img {
   float: left;
   width: 30px;
@@ -18,4 +22,9 @@
 
 .ant-menu.ant-menu-dark .ant-menu-item-selected {
   background-color: #9c27b0;
+}
+
+.ant-btn:hover {
+  color: #9c27b0;
+  border-color: #9c27b0;
 }
