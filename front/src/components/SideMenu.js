@@ -6,13 +6,20 @@ import Logo from "../logo.svg";
 const { Sider } = Layout;
 
 export default function SideMenu(props) {
-  const { options, onSelect, headTitle, currentId } = props;
+  const {
+    options,
+    onSelect,
+    headTitle,
+    currentId,
+    collapsed,
+    onCollapse
+  } = props;
 
   return (
-    <Sider>
+    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo">
         <img src={Logo} alt={`${headTitle} Logo`} />
-        <h2>{headTitle}</h2>
+        {!collapsed && <h2>{headTitle}</h2>}
       </div>
 
       <Menu

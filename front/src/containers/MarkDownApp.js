@@ -15,7 +15,8 @@ export default class App extends Component {
       documentsList: [],
       currentDocument: null,
       loading: false,
-      message: null
+      message: null,
+      collapsed: false
     };
   }
 
@@ -27,6 +28,9 @@ export default class App extends Component {
   handleOnCreateClick = async () => {
     try {
       const title = window.prompt(`Name your new document`);
+
+      if (!title) return;
+
       this.setState({ loading: true, message: null });
       const { data } = await documentsApi.create(title);
       this.setState({
@@ -111,13 +115,16 @@ export default class App extends Component {
       currentDocument,
       message,
       messageType,
-      loading
+      loading,
+      collapsed
     } = this.state;
 
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <SideMenu
           headTitle="Mark Down Editor"
+          collapsed={collapsed}
+          onCollapse={collapsed => this.setState({ collapsed })}
           options={documentsList}
           currentId={currentDocument ? currentDocument._id : 0}
           onSelect={document =>
