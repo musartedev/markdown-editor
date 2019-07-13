@@ -10,7 +10,9 @@ exports.add = async (req, res) => {
     const newDocument = new Document({ title });
     await newDocument.save();
 
-    return sendResponse.ok(res, 201, newDocument);
+    return sendResponse.ok(res, 201, {
+      message: "Documment added successfully!"
+    });
   } catch (err) {
     return sendResponse.error(res, err);
   }
@@ -31,7 +33,7 @@ exports.edit = async (req, res) => {
       { new: true, useFindAndModify: false }
     );
 
-    return sendResponse.ok(res, 200, docUpdated);
+    return sendResponse.ok(res, 200, { message: "Document saved!" });
   } catch (err) {
     console.log(err);
     return sendResponse.error(res, err);
