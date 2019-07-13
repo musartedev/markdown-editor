@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Server side for markdown editor",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node index.js"
+  },
   "author": "Mariangelica Useche",
   "license": "ISC",
   "devDependencies": {
