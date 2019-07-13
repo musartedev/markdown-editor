@@ -18,6 +18,9 @@ export default function MarkDownEditor(props) {
         className="gutter-row"
         style={{ backgroundColor: "black" }}
         span={12}
+        xs={24}
+        sm={24}
+        md={12}
       >
         <Input.TextArea
           autoFocus
@@ -26,7 +29,13 @@ export default function MarkDownEditor(props) {
           onChange={({ target }) => handleOnChange(target.value)}
         />
       </Col>
-      <Col className="gutter-row markdown-container" span={12}>
+      <Col
+        className="gutter-row markdown-container"
+        span={12}
+        xs={24}
+        sm={24}
+        md={12}
+      >
         <div
           className="markdown-body"
           dangerouslySetInnerHTML={renderResult()}

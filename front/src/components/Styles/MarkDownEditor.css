@@ -24,4 +24,13 @@
   .markdown-body {
     padding: 15px;
   }
+
+  .textarea {
+    height: 50vh !important;
+    min-height: 40vh;
+  }
+
+  .markdown-container {
+    height: 40vh !important;
+  }
 }

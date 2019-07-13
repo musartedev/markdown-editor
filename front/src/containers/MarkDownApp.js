@@ -94,11 +94,11 @@ export default class App extends Component {
       this.setState({ loading: true });
       const { data } = await documentsApi.get();
 
-      this.setState(state => ({
+      this.setState({
         documentsList: data.documents,
         loading: false,
         currentDocument: data.documents[0]
-      }));
+      });
     } catch (error) {
       this.setState({ loading: false, message: "Error" });
       console.log(error);
