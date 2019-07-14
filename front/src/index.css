@@ -1,30 +1,36 @@
-::selection {
-  color: white;
-  background-color: #9c27b0;
+:root {
+  --main-color: #9c27b0;
 }
 
+::selection {
+  color: white;
+  background-color: var(--main-color);
+}
+
+.main-layout {
+  min-height: 100vh;
+}
 .center {
   text-align: center;
 }
 
-.logo > img {
-  float: left;
-  width: 30px;
-  left: 5px;
-}
-
-.logo > h2 {
-  color: white;
-  position: relative;
-  left: 5px;
-  font-size: 20px;
-}
-
 .ant-menu.ant-menu-dark .ant-menu-item-selected {
-  background-color: #9c27b0;
+  background-color: var(--main-color);
 }
 
-.ant-btn:hover {
-  color: #9c27b0;
-  border-color: #9c27b0;
+.ant-btn:hover,
+.ant-btn:active,
+.ant-btn:focus {
+  color: var(--main-color);
+  border-color: var(--main-color);
+}
+
+button {
+  margin-right: 1em;
+}
+
+@media (max-width: 767px) {
+  button > span {
+    display: none !important;
+  }
 }

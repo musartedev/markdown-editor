@@ -16,15 +16,41 @@ export default class App extends Component {
       currentDocument: null,
       loading: false,
       message: null,
+      messageType: null,
       collapsed: false
     };
   }
 
-  handleOnChange = async value => {
-    const { currentDocument } = this.state;
-    this.setState({ currentDocument: { ...currentDocument, rawText: value } });
+  // Handle error response
+  showErrorResponse = error => {
+    const message =
+      error.response &&
+      error.response.data &&
+      error.response.data.error &&
+      error.response.data.error.description
+        ? error.response.data.error.description
+        : "An error has ocurred!";
+
+    this.setState({ loading: false, message, messageType: "danger" });
   };
 
+  // Get documents from server
+  getDocuments = async () => {
+    try {
+      this.setState({ loading: true });
+      const { data } = await documentsApi.get();
+
+      this.setState({
+        documentsList: data.documents,
+        loading: false,
+        currentDocument: data.documents[0]
+      });
+    } catch (error) {
+      this.showErrorResponse(error);
+    }
+  };
+
+  // Add document button
   handleOnCreateClick = async () => {
     try {
       const title = window.prompt(`Name your new document`);
@@ -33,28 +59,20 @@ export default class App extends Component {
 
       this.setState({ loading: true, message: null });
       const { data } = await documentsApi.create(title);
-      this.setState({
-        message: data.message || "hola",
-        messageType: "success"
-      });
+      this.setState({ message: data.message, messageType: "success" });
       return this.getDocuments();
     } catch (error) {
-      const message =
-        error.response &&
-        error.response.data &&
-        error.response.data.error &&
-        error.response.data.error.description
-          ? error.response.data.error.description
-          : "An error has ocurred!";
-
-      this.setState({ loading: false, message });
+      this.showErrorResponse(error);
     }
   };
 
+  // Delete document button
   handleOnDeleteClick = async () => {
     const { currentDocument } = this.state;
     if (
-      window.confirm(`Are you sure you want to delete ${currentDocument.title}`)
+      window.confirm(
+        `Are you sure you want to delete ${currentDocument.title}?`
+      )
     ) {
       try {
         this.setState({ loading: true, message: null });
@@ -62,16 +80,13 @@ export default class App extends Component {
         this.setState({ message: data.message, messageType: "success" });
         return this.getDocuments();
       } catch (error) {
-        this.setState({
-          loading: false,
-          message: "Error",
-          messageType: "danger"
-        });
-        console.log(error);
+        this.showErrorResponse(error);
       }
     }
+    return;
   };
 
+  // Save document button
   handleOnSaveClick = async () => {
     const { currentDocument } = this.state;
     try {
@@ -84,29 +99,18 @@ export default class App extends Component {
       this.setState({ message: data.message });
       this.getDocuments();
     } catch (error) {
-      this.setState({ loading: false, message: "Error" });
-      console.log(error);
+      this.showErrorResponse(error);
     }
   };
 
-  getDocuments = async () => {
-    try {
-      this.setState({ loading: true });
-      const { data } = await documentsApi.get();
-
-      this.setState({
-        documentsList: data.documents,
-        loading: false,
-        currentDocument: data.documents[0]
-      });
-    } catch (error) {
-      this.setState({ loading: false, message: "Error" });
-      console.log(error);
-    }
+  // Textarea onChange
+  handleOnChange = async value => {
+    const { currentDocument } = this.state;
+    this.setState({ currentDocument: { ...currentDocument, rawText: value } });
   };
 
-  async componentDidMount() {
-    await this.getDocuments();
+  componentDidMount() {
+    return this.getDocuments();
   }
 
   render() {
@@ -120,42 +124,31 @@ export default class App extends Component {
     } = this.state;
 
     return (
-      <Layout style={{ minHeight: "100vh" }}>
+      <Layout>
         <SideMenu
           headTitle="Mark Down Editor"
-          collapsed={collapsed}
-          onCollapse={collapsed => this.setState({ collapsed })}
           options={documentsList}
           currentId={currentDocument ? currentDocument._id : 0}
-          onSelect={document =>
-            this.setState({
-              currentDocument: document
-            })
-          }
+          collapsed={collapsed}
+          onCollapse={collapsed => this.setState({ collapsed })}
+          onSelect={document => this.setState({ currentDocument: document })}
         />
         <Layout>
           <Header style={{ padding: "1em" }}>
             <Row type="flex" justify="end">
-              {loading && <Spin style={{ marginRight: "1em" }} spinning />}
-              <Button
-                style={{ marginRight: "1em", alignSelf: "flex-start" }}
-                onClick={this.handleOnCreateClick}
-              >
+              <Spin style={{ marginRight: "1em" }} spinning={loading} />
+              <Button icon="plus" onClick={this.handleOnCreateClick}>
                 Add
               </Button>
               {currentDocument && [
                 <Button
                   key={1}
-                  style={{ marginRight: "1em" }}
+                  icon="delete"
                   onClick={this.handleOnDeleteClick}
                 >
                   Delete
                 </Button>,
-                <Button
-                  key={2}
-                  style={{ marginRight: "1em" }}
-                  onClick={this.handleOnSaveClick}
-                >
+                <Button key={2} icon="save" onClick={this.handleOnSaveClick}>
                   Save
                 </Button>
               ]}

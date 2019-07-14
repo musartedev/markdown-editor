@@ -2,6 +2,7 @@ import React from "react";
 import { Menu, Icon, Layout } from "antd";
 
 import Logo from "../logo.svg";
+import "./Styles/SideMenu.css";
 
 const { Sider } = Layout;
 
