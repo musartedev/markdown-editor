@@ -17,7 +17,8 @@ export default class App extends Component {
       loading: false,
       message: null,
       messageType: null,
-      collapsed: false
+      collapsed: false,
+      saved: true
     };
   }
 
@@ -42,12 +43,40 @@ export default class App extends Component {
 
       this.setState({
         documentsList: data.documents,
-        loading: false,
-        currentDocument: data.documents[0]
+        loading: false
       });
     } catch (error) {
       this.showErrorResponse(error);
     }
+  };
+
+  saveCurrentDocument = async () => {
+    const { currentDocument } = this.state;
+    try {
+      this.setState({ loading: true, message: null });
+      const { data } = await documentsApi.update(
+        currentDocument._id,
+        currentDocument.rawText
+      );
+      await this.getDocuments();
+      this.setState({ message: data.message, saved: true, loading: false });
+    } catch (error) {
+      this.showErrorResponse(error);
+    }
+  };
+
+  handleOnSelectMenu = async document => {
+    const { saved, currentDocument } = this.state;
+
+    if (!saved) {
+      if (
+        window.confirm(`Save document ${currentDocument.title} before change?`)
+      ) {
+        await this.saveCurrentDocument();
+        await this.getDocuments();
+      }
+    }
+    this.setState({ currentDocument: document });
   };
 
   // Add document button
@@ -60,7 +89,8 @@ export default class App extends Component {
       this.setState({ loading: true, message: null });
       const { data } = await documentsApi.create(title);
       this.setState({ message: data.message, messageType: "success" });
-      return this.getDocuments();
+      await this.getDocuments();
+      this.setState(state => ({ currentDocument: state.documentsList[0] })); // Set the last created document as current
     } catch (error) {
       this.showErrorResponse(error);
     }
@@ -78,7 +108,8 @@ export default class App extends Component {
         this.setState({ loading: true, message: null });
         const { data } = await documentsApi.remove(currentDocument._id);
         this.setState({ message: data.message, messageType: "success" });
-        return this.getDocuments();
+        await this.getDocuments();
+        this.setState(state => ({ currentDocument: state.documentsList[0] })); // Set the last created document as current
       } catch (error) {
         this.showErrorResponse(error);
       }
@@ -88,29 +119,21 @@ export default class App extends Component {
 
   // Save document button
   handleOnSaveClick = async () => {
-    const { currentDocument } = this.state;
-    try {
-      this.setState({ loading: true, message: null });
-      const { data } = await documentsApi.update(
-        currentDocument._id,
-        currentDocument.rawText
-      );
-
-      this.setState({ message: data.message });
-      this.getDocuments();
-    } catch (error) {
-      this.showErrorResponse(error);
-    }
+    return this.saveCurrentDocument();
   };
 
   // Textarea onChange
   handleOnChange = async value => {
     const { currentDocument } = this.state;
-    this.setState({ currentDocument: { ...currentDocument, rawText: value } });
+    this.setState({
+      currentDocument: { ...currentDocument, rawText: value },
+      saved: false
+    });
   };
 
-  componentDidMount() {
-    return this.getDocuments();
+  async componentDidMount() {
+    await this.getDocuments();
+    this.setState(state => ({ currentDocument: state.documentsList[0] }));
   }
 
   render() {
@@ -131,7 +154,7 @@ export default class App extends Component {
           currentId={currentDocument ? currentDocument._id : 0}
           collapsed={collapsed}
           onCollapse={collapsed => this.setState({ collapsed })}
-          onSelect={document => this.setState({ currentDocument: document })}
+          onSelect={this.handleOnSelectMenu}
         />
         <Layout className="main-layout">
           <Header style={{ padding: "1em" }}>
@@ -163,7 +186,7 @@ export default class App extends Component {
                 onClose={() => this.setState({ message: null })}
               />
             )}
-            {documentsList.length > 0 ? (
+            {documentsList.length > 0 && currentDocument ? (
               <MarkDownEditor
                 rawText={currentDocument.rawText}
                 handleOnChange={this.handleOnChange}
