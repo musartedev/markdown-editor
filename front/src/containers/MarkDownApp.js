@@ -76,7 +76,7 @@ export default class App extends Component {
         await this.getDocuments();
       }
     }
-    this.setState({ currentDocument: document });
+    this.setState({ currentDocument: document, saved: true });
   };
 
   // Add document button
