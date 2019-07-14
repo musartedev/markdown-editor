@@ -31,7 +31,7 @@ export default class App extends Component {
         ? error.response.data.error.description
         : "An error has ocurred!";
 
-    this.setState({ loading: false, message, messageType: "danger" });
+    this.setState({ loading: false, message, messageType: "error" });
   };
 
   // Get documents from server
@@ -133,7 +133,7 @@ export default class App extends Component {
           onCollapse={collapsed => this.setState({ collapsed })}
           onSelect={document => this.setState({ currentDocument: document })}
         />
-        <Layout>
+        <Layout className="main-layout">
           <Header style={{ padding: "1em" }}>
             <Row type="flex" justify="end">
               <Spin style={{ marginRight: "1em" }} spinning={loading} />
