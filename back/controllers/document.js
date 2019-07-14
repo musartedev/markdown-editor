@@ -11,7 +11,7 @@ exports.add = async (req, res) => {
     await newDocument.save();
 
     return sendResponse.ok(res, 201, {
-      message: "Documment added successfully!"
+      message: "Document added successfully!"
     });
   } catch (err) {
     return sendResponse.error(res, err);
