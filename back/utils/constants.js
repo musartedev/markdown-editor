@@ -1,8 +1,11 @@
+const dotenv = require("dotenv");
+if (process.env.NODE_ENV !== "production") dotenv.config();
+
 exports.PORT = process.env.PORT || 3001;
-exports.DB_PASS = process.env.DB_PASS || "supersecret";
-exports.DB_USER = process.env.DB_USER || "root";
-exports.DB_HOST = process.env.DB_HOST || "markdown-example-u5sia.mongodb.net";
-exports.DB_NAME = process.env.DB_NAME || "markdown-app";
+exports.DB_PASS = process.env.DB_PASS;
+exports.DB_USER = process.env.DB_USER;
+exports.DB_HOST = process.env.DB_HOST;
+exports.DB_NAME = process.env.DB_NAME;
 
 exports.ERRORS = {
   INTERNAL_ERROR: {

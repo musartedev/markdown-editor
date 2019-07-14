@@ -2,10 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
 
 const { PORT } = require("./utils/constants");
 const { database } = require("./config");
 const documentRoutes = require("./routes/document");
+
+if (process.env.NODE_ENV !== "production") dotenv.config();
 
 const app = express();
 app.use(cors()); // Allow cross-origin
