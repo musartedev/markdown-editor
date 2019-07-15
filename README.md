@@ -24,7 +24,6 @@ $ npm install
 
 ```
 $ mv .evn.example .env
-
 ```
 
 4. Start local server
@@ -60,3 +59,5 @@ $ yarn start
 ```
 
 ### [Live Demo](http://mus-markdown-editor.herokuapp.com)
+
+### [Demo Video](https://youtu.be/jHfARQ5kBX8)
